@@ -12,51 +12,51 @@ import (
 	"net/http"
 	"os"
 )
-
-type ServerCert struct {
-	CertFilename string
-	KeyFilename string
-	KeyPassword  string
-}
+// type ServerCert struct {
+// }
 
 type HomeServerConfig struct {
-	DefaultCert ServerCert
+	TLSConfig * tls.Config
+	// TestingMode bool
+	ServerAddr string
+	RootDir string
 }
 
 // TODO::
-//   - use ENV variables to set name of paths you are using
+//	 - start getting this info from a config file
 //   - choose a good set of cypherSuits to accept
 //   - run an security audit and setup proper headers
 func loadServerConfig() (*HomeServerConfig, error) {
-	return &HomeServerConfig{
-		DefaultCert: ServerCert {
-			CertFilename: ".tls-certs/jhertz_ink_crt.pem",
-			KeyFilename:  ".tls-certs/jhertz_ink_key.pem",
-			KeyPassword: "",
-		},
-	}, nil
+	cfg := &HomeServerConfig{
+		TLSConfig: nil,
+	}
+
+	if os.Getenv("HOME_TEST") != "" { // in testing mode
+		cfg.ServerAddr = "localhost:8080"
+		cfg.RootDir    = "frontend"
+	} else {
+		cfg.ServerAddr = "0.0.0.0:443"
+		cfg.RootDir    = ".static-files"
+		tls, err      := loadTLSConfig(
+			".tls-certs/jhertz_ink_crt.pem",
+			".tls-certs/jhertz_ink_key.pem",
+		)
+		if err != nil {
+			return nil, fmt.Errorf("Error setting TLS config: %w", err)
+		}
+		cfg.TLSConfig = tls
+	}
+
+	return cfg, nil
 }
 
-func (cfg * HomeServerConfig) loadCertificates() ([]tls.Certificate, error) {
+func loadTLSConfig(certFilename string, keyFilename string) (*tls.Config, error) {
+	cert, err := tls.LoadX509KeyPair( 
+		certFilename, keyFilename,
+	)
 
-	leafCertCfg  := &cfg.DefaultCert
-	tlsCert, err := tls.LoadX509KeyPair( leafCertCfg.CertFilename, leafCertCfg.KeyFilename )
 	if err != nil {
 		return nil, fmt.Errorf("failed to load leaf certiciate key pair: %w", err)
-	}
-
-	return []tls.Certificate{ tlsCert }, nil
-}
-
-func generateTLSConfig() (*tls.Config, error) {
-	homeCfg, error := loadServerConfig()
-	if error != nil {
-		return nil, error
-	}
-
-	certs, err := homeCfg.loadCertificates()
-	if err != nil {
-		return nil, err
 	}
 
 	hostname, err := os.Hostname()
@@ -68,55 +68,47 @@ func generateTLSConfig() (*tls.Config, error) {
 	return &tls.Config{
 		MinVersion: tls.VersionTLS12,
 		MaxVersion: tls.VersionTLS13,
-		Certificates: certs,
-		// ClientCAs:  pool,
+		Certificates: []tls.Certificate{ cert },
 		ServerName: hostname,
 	}, nil
 }
 
-
-func setupEndPoints() *http.ServeMux {
+func setupEndPoints(cfg * HomeServerConfig) *http.ServeMux {
 	router := http.NewServeMux()
-	fs     := http.FileServer(http.Dir(".static-files"))
+	fs     := http.FileServer(http.Dir(cfg.RootDir))
 	router.Handle("GET /", fs)
-	// router.HandleFunc("GET /", fs)
-// 	router.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
-// 		fmt.Fprintf(w, `
-// <title> Welcome Page </title>
-// <p> Hi there and welcome to <a href="https://jhertz.ink"> jhertz.ink </a></p>
-// `)
-// 	})
-
 	return router
 }
-
-
 
 func main() {
 	log.SetFlags(log.Lshortfile)
 
-	cfg, err := generateTLSConfig()
+	cfg, err := loadServerConfig()
 	if err != nil {
-		log.Fatal("Error setting TLS config: ", err)
+		log.Fatal("Error loading home config: ", err)
 	}
 
-	router := setupEndPoints()
 	server := &http.Server{
-		Addr:         "0.0.0.0:443",
-		Handler:      router,
-		TLSConfig:    cfg,
+		Addr:         cfg.ServerAddr,
+		TLSConfig:    cfg.TLSConfig,
+		Handler:      setupEndPoints(cfg), // TODO: what do you want to do with this
 	}
 
 	ln, err := net.Listen("tcp", server.Addr)
 	if err != nil {
 		log.Fatalf("failed to attach to server addr: %s", err)
 	}
-	syscall.Setuid(1001)
 
 	defer ln.Close()
-	err = server.ServeTLS(ln, "", "")
+	if server.TLSConfig == nil {
+		log.Printf("starting server at http://%s", cfg.ServerAddr)
+		err = server.Serve(ln)
+	} else {
+		syscall.Setuid(1001)
+		err = server.ServeTLS(ln, "", "")
+	}
+
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }
-
