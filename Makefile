@@ -1,4 +1,3 @@
-# dirs
 BIN_DIR := bin
 SRC_DIR := src
 
@@ -19,9 +18,8 @@ clean:
 test:
 	HOME_TEST=1 go run $(SRC_DIR)/main.go
 
-push: $(EXE)
+deploy: $(EXE)
 	ssh home "sudo systemctl stop server.service"
 	rsync bin/server home_server:~/server
 	rsync -av ./frontend/ home_server:~/.static-files
 	ssh home "sudo systemctl start server.service"
-

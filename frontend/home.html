@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html> 
+	<head> 
+		<!-- <link rel="icon" type="image/png" href="https://web.dev/static/articles/building/an-adaptive-favicon/image/example-dark-theme-favico-6a6f6f67bc3e7.png"> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+		<title>Login Page</title>
+		<style> 
+			body {
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+
+				align-items: center;
+				height: 90vh;
+				margin: 0;
+			}
+
+			.form > input {
+				font: 1.5rem monospace;
+			}
+
+			.form {
+				display: flex;
+				flex-direction: column;
+				width: max-content;
+				gap: 0.5rem;
+			}
+
+			.form > :first-child {
+				display: block;
+				height: 200px;
+				width: 200px;
+				background: orange;
+				border-radius: 100%;
+
+				align-self: center;
+			}
+
+			.nav-bar {
+				position: fixed;
+				height: 4rem;
+				width: 99vw;
+				background: orange;
+				top: 0.5rem;
+
+				border-radius: 1rem;
+				align-content: center;
+				padding-left: 1rem;
+				box-sizing: border-box;
+				font: bold 2rem monospace;
+				color: white;
+				text-align: center;
+				user-select: none;
+			}
+
+			.nav-bar:hover {
+				color: black;
+			}
+
+			img {
+				user-select: none;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="nav-bar">Welcome Home</div>
+		<form class="form">
+			<img src="/img/user-logo.png"/>
+			<input name="login"    type="text" placeholder="login"/>
+			<input name="password" type="password" placeholder="password"/>
+			<input type="submit"   value="Sign in"/>
+		</form>
+
+		<script>
+			const form = document.querySelector('form');
+			form.addEventListener('submit', e => {
+				alert('TO BE COMPLETED')
+				e.preventDefault()
+			})
+		</script>
+	</body>
+</html>

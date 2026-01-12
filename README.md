@@ -14,3 +14,6 @@ I eventually realized that I am almost over collegue and I still need to build u
 - [ ] Window to manage my projects
 - [ ] Calendar to manage my days
 - [ ] A library with my books
+
+# Useful links
+- [SVG editor](https://boxy-svg.com/)

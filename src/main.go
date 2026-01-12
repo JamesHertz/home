@@ -8,31 +8,34 @@ import (
 	// "syscall"
 	// "time"
 	"fmt"
+	path "path/filepath"
 	"log"
 	"net/http"
 	"os"
 )
-// type ServerCert struct {
-// }
 
 type HomeServerConfig struct {
 	TLSConfig * tls.Config
-	// TestingMode bool
 	ServerAddr string
 	RootDir string
 }
 
 // TODO::
-//	 - start getting this info from a config file
-//   - choose a good set of cypherSuits to accept
-//   - run an security audit and setup proper headers
+// 	- [ ] Look for a proper way to do the things
+// 	- [ ] create a template dir
+// 	- [ ] Add some sort of legal things in the end of the page
+//	- [ ] start getting this info from a config file
+//	- [ ] choose a good set of cypherSuits to accept
+//	- [ ] run an security audit and setup proper headers
+
 func loadServerConfig() (*HomeServerConfig, error) {
 	cfg := &HomeServerConfig{
 		TLSConfig: nil,
 	}
 
 	if os.Getenv("HOME_TEST") != "" { // in testing mode
-		cfg.ServerAddr = "localhost:8080"
+		// cfg.ServerAddr = "localhost:8080"
+		cfg.ServerAddr = "0.0.0.0:8080"
 		cfg.RootDir    = "frontend"
 	} else {
 		cfg.ServerAddr = "0.0.0.0:443"
@@ -77,6 +80,9 @@ func setupEndPoints(cfg * HomeServerConfig) *http.ServeMux {
 	router := http.NewServeMux()
 	fs     := http.FileServer(http.Dir(cfg.RootDir))
 	router.Handle("GET /", fs)
+	router.HandleFunc("GET /home", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, path.Join(cfg.RootDir, "home.html"))
+	})
 	return router
 }
 
