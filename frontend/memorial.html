@@ -1,0 +1,160 @@
+<!doctype html>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title> Memorial Questions </title>
+
+<style>
+
+    .box {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+    }
+
+    .box {
+        width: 99%;
+        display: grid;  
+        grid-template-columns: 0.1fr 0.2fr 5fr 1fr;
+        gap: 10px;
+    }
+
+    a, label {
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 1rem;
+        color: white;
+        padding: 0.25rem;
+        align-content: center;
+    }
+
+    label {
+        text-align: center;
+        background: black;
+		color: black;
+    }
+
+    a {
+        background: red;
+        text-align: center;
+        text-decoration: none;
+		color: red;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+	.number {
+		color: white;
+		background: cyan;
+	}
+
+	.multi-links {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+	}
+
+	a.show, .show > a, .show { 
+		color: white;
+	}
+
+	a:visited {
+        text-decoration: line-through;
+	}
+
+	h1 {
+		text-align: center;
+        font-family: monospace;
+	}
+</style>
+
+<h1>NAF - Memorial<h1>
+<div class="box"></div>
+<script>
+    const box = document.querySelector('.box');
+    const questions = [
+        // { question: 'Por que é que faz-se o memorial após o pôr do sol?', url: 'https://wol.jw.org/pt/wol/d/r5/lp-t/1200003397#h=4:~:text=26%2C%C2%A027.-,Visto,-que%20para%20os' },
+		{ question: 'Que dia é amanhã?', url: ['https://www.jw.org/pt-pt/testemunhas-de-jeova/memorial/'] },
+		{ question: 'Por que é que comemoramos o memorial?', url: ['https://wol.jw.org/pt-PT/wol/b/r296/lp-tpo/nwtsty/42/22#study=discover&v=42:22:19:~:text=de%20Deus.%E2%80%9D%2B-,19%E2%80%AFEle,-tomou%20tamb%C3%A9m%20um'] },
+		{ question: 'Quando é que se comemora o memorial e por que é que todos os anos é num dia diferente?', url: [
+			'https://www.jw.org/pt-pt/testemunhas-de-jeova/perguntas-frequentes/ceia-do-senhor/#:~:text=baseia%20na%20B%C3%ADblia.-,Quando,-e%20a%20que', 
+			'https://wol.jw.org/pt/wol/d/r5/lp-t/402013926#:~:text=Noturna%20do%20Senhor.-,A%20CELEBRA%C3%87%C3%83O%20DA%20MORTE%20DE%20CRISTO%20EM%202014,-A%20Lua%20d%C3%A1'
+		]},
+		{ question: 'Por que é que comemoramos o memorial após o pôr do sol?', url: ['https://wol.jw.org/pt/wol/d/r5/lp-t/1200003397#h=4:~:text=26%2C%C2%A027.-,Visto,-que%20para%20os'] },
+		{ question: 'Como é que se comemora o memorial?', url: [
+			'https://wol.jw.org/pt/wol/d/r5/lp-t/402013926#:~:text=13.%20Como,est%C3%A3o%20ali%20presentes.',
+		]},
+		{ question: 'Por que é que só os ungidos comem do pão e bebem do vinho?', url: [
+			'https://www.jw.org/pt-pt/testemunhas-de-jeova/perguntas-frequentes/ceia-do-senhor/#:~:text=Quem%20come%20o,2%3A2.',
+			'https://wol.jw.org/pt/wol/d/r5/lp-t/402013926#:~:text=18.%20Mesmo,14%2D17.'
+		]},
+		{ question: 'O que é o Pecado?', url: [
+			'https://www.jw.org/pt-pt/ensinos-biblicos/perguntas/o-que-e-o-pecado/#:~:text=Nas%20l%C3%ADnguas%20originais,perfeitos%20de%20Deus.'
+		] },
+		{ question: 'Por que é que precisavamos do sacrifício de Jesus para ter perdão aos nossos pecados?', url: [
+			'https://www.jw.org/pt-pt/ensinos-biblicos/perguntas/jesus-sacrificio-resgate/#:~:text=Porque%20era%20necess%C3%A1rio,de%20o%20fazer.'
+		]},
+		{ question: 'Por que é que o sacrifício de Jesus foi uma grande prova de amor de Jeová e de Jesus?', url: [
+			'https://www.jw.org/en/library/books/bible-study/meaning-jesus-ransom-sacrifice/?utm_source=chatgpt.com#:~:text=10.%20How%20did,1%3A35.',
+			'https://www.jw.org/en/library/books/bible-study/meaning-jesus-ransom-sacrifice/?utm_source=chatgpt.com#:~:text=12.%20Why%20did,Endnote%2015.'
+		] },
+		{ question: 'Os apostolos comeravam o memorial no passado? Se sim, como?', url: ['/think.html'] },
+		{ question: 'Como é que a Inês, o James, o Joel, a Liane, a Melanie e a Nelly já mostraram que são gratos pelo memorial?', url: ['https://wol.jw.org/pt/wol/d/r5/lp-t/2026244#:~:text=8%20Se%20voc%C3%AA,2%2C%C2%A03.'] },
+		{ question: 'Como é que cada um de nós pode mostrar apreço pelo memorial amanhã?', url: ['https://www.jw.org/pt-pt/biblioteca/revistas/sentinela-estudo-janeiro-2025/As-b%C3%AAn%C3%A7%C3%A3os-que-recebemos-gra%C3%A7as-ao-amor-de-Jeov%C3%A1/#:~:text=15%20Existe%20ainda,12%3A13.'] },
+		{ question: 'O que mais está disposto a fazer para mostrar a tua gratidão pelo Memorial?', url: [
+			'/exercise.html',
+		], color: '#FFD700'},
+		{ question: 'Sabado 4 de Abril, 19h30 em Amadora, vais estar presente? 🤭', url: ['https://hub.jw.org/meetings/goto/entry-point/meetings?scope_kind=location&scope_id=f0452f99-2570-5fe1-9bb0-53a0fc5fd4ac&eventId=7d74db8d-1279-4252-ae8d-c7baeb16793d'], color: 'brown' },
+    ];
+
+
+	let i = 1;
+    for (const {question, url, color} of questions) {
+
+		const cBox = document.createElement('input');
+		cBox.type  = 'checkbox';
+
+        const nEl = document.createElement('label');
+		nEl.innerText = `${i}`;
+		nEl.classList.add('number');
+
+        const qEl = document.createElement('label');
+        qEl.innerText = question;
+
+		const sEl = document.createElement( url.length > 1 ? 'div' : 'a');
+		if(url.length > 1) {
+			sEl.classList.add('multi-links');
+			let i = 1;
+			for (const link of url) {
+				const el     = document.createElement('a');
+				el.href      = link;
+				el.target    = '_blank';
+				el.innerText = `fonte ${i}`;
+				sEl.appendChild(el);
+				i++;
+			}
+		} else {
+			sEl.innerText = 'fonte';
+			sEl.target    = '_blank';
+			sEl.href      = url[0];
+		}
+
+		cBox.addEventListener('change', () => {
+			if(cBox.checked) {
+				sEl.classList.add('show');
+				qEl.classList.add('show');
+				if(color) qEl.style.background = color;
+			} else {
+				sEl.classList.remove('show');
+				qEl.classList.remove('show');
+				sEl.style = "";
+				qEl.style = "";
+			}
+		})
+
+        box.append(cBox, nEl, qEl, sEl);
+		i += 1;
+    }
+</script>
