@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+		<title>Jh's Webpage</title>
+		<style>
+
+			body {
+				background-image: linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%);
+				background-attachment: fixed;
+				background-repeat: no-repeat;
+				font-family: monospace;
+				font-size: 1.2rem;
+				padding: 5px;
+				height: 80vh;
+
+				display: flex;
+				place-content: center;
+				flex-wrap: wrap;
+			}
+
+			main {
+				box-sizing: border-box;
+				border-radius: 20px;
+				border: 2px solid white;
+				padding: min(5%, 10px);
+				text-align: center;
+				padding-top: max(5%, 40px);
+				padding-bottom: max(5%, 40px);
+			}
+
+			.logo {
+				height: 150px;
+				user-select: none;
+			}
+
+			navbar {
+				width: 100%;
+				margin-top: 5px;
+				display: block;
+			}
+
+			navbar > div {
+				display: flex;
+				flex-flow: row wrap;
+				justify-content: center;
+				gap: 5px;
+			}
+
+			.tabs {
+				background: black;
+				color: white;
+				font-weight: bold;
+				padding: 5px;
+				border-radius: 5px;
+				width: 10ch;
+				user-select: none;
+				background-color: attr(data-color type(<color>), grey);
+				text-decoration: none;
+			}
+
+
+			.tabs:active[data-color], .tabs:hover[data-color] {
+				scale: 1.05;
+				cursor: pointer;
+				animation-name: none;
+			}
+
+			.tabs:not([data-color]) {
+				opacity: 0.5;
+			}
+
+			.tabs:hover {
+			  cursor: not-allowed;
+			}
+
+			.welcome-message {
+				margin-top: 20px;
+				color: white;
+				text-align: center;
+				line-height: 1.5;
+				max-width: 70ch;
+			}
+
+			a {
+				text-decoration: none;
+				font-weight: 900;
+				color: white;
+			}
+
+		</style>
+	</head>
+
+	<body>
+
+		<main> 
+			<svg class="logo" viewBox="0 0 270 270" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+			  <circle style="fill: #2596be; stroke: none;" cx="135" cy="135" r="135"></circle>
+			  <!-- <ellipse style="fill: #2596be; stroke: none;" cx="135" cy="135" rx="132.811" ry="132.811"></ellipse> -->
+			  <text style="white-space: pre; fill: white; font-family: Arial, sans-serif; font-size: 28px;" x="165.743" y="312.854" transform="matrix(7.616509, 0, 0, 9.134413, -1240.006226, -2634.161377)">Jh</text>
+			</svg>
+
+			<navbar>
+				<div>
+					<a class="tabs" data-color=orange href="/home">home</a>
+					<a class="tabs">porfolio</a>
+					<a class="tabs">articles</a>
+				</div>
+			</navbar>
+
+				<div class="welcome-message">
+					Hi there, and welcome to <a href="/">jhertz.dev</a>! I am <i>James Hertz</i>, a rising software engineer and this is my small corner of the world.<br> <br> <strong>Have fun!!</strong> 
+				</div>
+		</main>
+	</body>
+</html>
+
