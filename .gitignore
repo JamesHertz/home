@@ -2,6 +2,7 @@
 /*.txt
 /draft
 .*
+*.db
 
 # Added by cargo
 
